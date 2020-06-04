@@ -6,12 +6,12 @@
         <div class="typewriter">
           <div style="--aspect-ratio:9/16;">
             <div>
-              <vue-typed-js class="centered" :strings=processedHeader :typeSpeed="30" :showCursor="false">
+              <vue-typed-js class="centered" :strings=processedHeader :typeSpeed=headerSpeed :showCursor="false">
                 <div class="header-style">
                   <p class="typing"></p>
                 </div>
               </vue-typed-js>
-              <vue-typed-js class="centered" :strings=processedMsg :typeSpeed="10" :showCursor="false">
+              <vue-typed-js class="centered" :strings=processedMsg :typeSpeed=processedTextSpeed :showCursor="false">
                 <div class="text-style">
                   <div class="typing"></div>
                 </div>
@@ -28,7 +28,11 @@ export default {
   name: 'Typewriter',
   props: {
     header: String,
-    msg: String
+    msg: String,
+    headerSpeed: Number,
+    textSpeed: Number,
+    fullStopPause: Number,
+    pauseAfterHeader: Number
   },
   computed: {
     processedMsg() {
@@ -62,14 +66,21 @@ export default {
           
           if (arr[index].slice(-1) == '.')
           {
-            arr[index] = arr[index] + ' ^200 '
+            arr[index] = arr[index] + ' ^' + this.fullStopPause.toString() + ' '
           }
 
         })
-        return ["^1000" + splitArr.join(" ")]
+
+        return ["^"+ this.pauseAfterHeader.toString() + splitArr.join(" ") + " " + this.headerSpeed + " " + this.textSpeed + " " + this.fullStopPause + " " + this.pauseAfterHeader]
     },
     processedHeader() {
       return [this.header]
+    },
+    processedHeaderSpeed() {
+      return this.headerSpeed
+    },
+    processedTextSpeed() {
+      return this.textSpeed
     }
   }
 }
@@ -79,7 +90,7 @@ export default {
 <style scoped>
 @font-face {
     font-family: "Komu-A";
-    src: url("C:/Users/Onco/Desktop/Works/typewriter-to-video/src/assets/Komu-A.otf");
+    src: url("../assets/Komu-A.otf");
 }
 .centered {
   display: flex;
