@@ -2,15 +2,47 @@
   <div id="app">
   <meta charset="utf-8">
     <img alt="Do Sto Slov" src="./assets/logo.jpg">
-    <p>Názov:<br><input v-model="header" /></p>
-    <p>Text:<br><input v-model="text" /></p>
-    <p>Title Speed: <input v-model="headerSpeed"></p>
-    <p>Text Speed: <input v-model="textSpeed"></p>
-    <p>Full-Stop Pause: 0.05s <input type="range" min="50" max="2000" value="200" v-model="fullStopPause"> 2s </p>
-    <p>Pause After Header: 0.05s <input type="range" min="50" max="5000" value="1000" v-model="pauseAfterHeader"> 5s </p>
-    <button v-on:click="hideComponent">Spusti</button>
-    <Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/>
-    <!-- button to generate GIF / MP4 video -->
+      <div class="row">
+        <div class="column">
+          <form>
+          <p class="table-row">
+            <label for="name">Názov:</label>
+            <input id="name" v-model="header">
+          </p>
+          <p class="table-row">
+            <label for="txt">Text:</label>
+            <br>
+            <textarea id="txt" cols="60" rows="11" v-model="text"></textarea>
+          </p>
+          <p class="table-row">
+            <label for="name-spd">Rýchlosť Pomenovania:</label>
+            <input id="name-spd" v-model="headerSpeed">
+          </p>
+          <p class="table-row">
+            <label for="txt-spd">Rýchlosť Textu:</label>
+            <input id="txt-spd" v-model="textSpeed">
+          </p>
+          <p class="table-row">
+            <label for="sent-pause">Pauza po vete:</label>
+            0.05s
+            <input id="sent-pause" type="range" min="50" max="2000" value="200" v-model="fullStopPause">
+            2s
+          </p>
+          <p class="table-row">
+            <label for="name-pause">Pauza po Pomenovaní:</label>
+            0.05s
+            <input id="name-pause" type="range" min="50" max="5000" value="1000" v-model="pauseAfterHeader">
+            5s
+          </p>
+          </form>
+          <button v-on:click="hideComponent">Spusti</button>
+        </div>
+        <div class="column">
+          <h2> Náhľad: </h2>
+          <Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/>
+          <!-- button to generate GIF / MP4 video -->
+        </div>
+      </div> 
   </div>
 </template>
 
@@ -26,11 +58,11 @@ export default {
     },
     header: {
         type: String,
-        default: 'NÁZOV'
+        default: 'POMENOVANIE'
     },
     text: {
         type: String,
-        default: 'Sem vlož svoj text...'
+        default: 'Sem vlož svoj text... *hviezdičkami* označ vybrané slová...'
     },
     headerSpeed: {
         type: Number,
@@ -68,5 +100,28 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+form {
+  display: table;
+}
+.table-row {
+  display: table-row;
+}
+label {
+  display: table-cell;
+}
+input {
+  display: table-cell;
+}
+.column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 </style>

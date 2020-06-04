@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueTypedJs from 'vue-typed-js'
+import CCapture from 'ccapture.js'
 import App from './App.vue'
 
 Vue.use(VueTypedJs)
