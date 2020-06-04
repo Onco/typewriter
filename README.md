@@ -1,4 +1,4 @@
-# typewriter-video
+# typewriter-to-video
 
 ## Project setup
 ```
