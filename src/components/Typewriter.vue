@@ -84,7 +84,7 @@ export default {
     }
   }
 }
-var capturer = new CCapture( { format: 'gif', workersPath: 'js/' } );
+//var capturer = new CCapture( { format: 'gif', workersPath: 'js/' } );
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -140,7 +140,7 @@ var capturer = new CCapture( { format: 'gif', workersPath: 'js/' } );
   [style*="--aspect-ratio"]::before {
     content: "";
     display: block;
-    padding-bottom: calc(100% / (var(--aspect-ratio)));
+    padding-top: calc(100% / (var(--aspect-ratio)));
   }  
   [style*="--aspect-ratio"] > :first-child {
     position: absolute;

@@ -15,11 +15,11 @@
             <textarea id="txt" cols="60" rows="11" v-model="text"></textarea>
           </p>
           <p class="table-row">
-            <label for="name-spd">Rýchlosť Pomenovania:</label>
+            <label for="name-spd">Rýchlosť názvu:</label>
             <input id="name-spd" v-model="headerSpeed">
           </p>
           <p class="table-row">
-            <label for="txt-spd">Rýchlosť Textu:</label>
+            <label for="txt-spd">Rýchlosť textu:</label>
             <input id="txt-spd" v-model="textSpeed">
           </p>
           <p class="table-row">
@@ -29,7 +29,7 @@
             2s
           </p>
           <p class="table-row">
-            <label for="name-pause">Pauza po Pomenovaní:</label>
+            <label for="name-pause">Pauza po názve:</label>
             0.05s
             <input id="name-pause" type="range" min="50" max="5000" value="1000" v-model="pauseAfterHeader">
             5s
@@ -48,6 +48,7 @@
 
 <script>
 import Typewriter from './components/Typewriter.vue'
+//import CCapture from './CCapture.all.min.js'
 
 export default {
   name: 'App',
