@@ -35,7 +35,11 @@
             5s
           </p>
           </form>
-          <button v-on:click="hideComponent">Spusti</button>
+          <br>
+          <button v-on:click="changeToggle">Spusti</button>
+          <br>
+          <br>
+          <button v-on:click="captureVideo">Uloz GIF</button>
         </div>
         <div class="column">
           <h2> Náhľad: </h2>
@@ -48,7 +52,6 @@
 
 <script>
 import Typewriter from './components/Typewriter.vue'
-//import CCapture from './CCapture.all.min.js'
 
 export default {
   name: 'App',
@@ -86,8 +89,10 @@ export default {
     Typewriter
   },
   methods: {
-    hideComponent: function () {
+    changeToggle: function () {
       this.toggle = !this.toggle
+    },
+    captureVideo: function() {
     }
   }
 }
@@ -118,11 +123,15 @@ input {
   float: left;
   width: 50%;
 }
-
 /* Clear floats after the columns */
 .row:after {
   content: "";
   display: table;
   clear: both;
+}
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
