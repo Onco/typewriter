@@ -84,7 +84,13 @@ export default {
     }
   }
 }
-//var capturer = new CCapture( { format: 'gif', workersPath: 'js/' } );
+var capturer = new this.$CCapture( {
+    format: 'gif', workersPath: 'js/',
+    framerate: 24,
+    verbose: true,
+    name: this.header,
+    timeLimit: 15,
+} );
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
