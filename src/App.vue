@@ -4,6 +4,7 @@
     <img alt="Do Sto Slov" src="./assets/logo.jpg">
       <div class="row">
         <div class="column">
+          <div>
           <form>
           <p class="table-row">
             <label for="name">Názov:</label>
@@ -40,12 +41,15 @@
           <br>
           <br>
           <button v-on:click="captureVideo">Uloz GIF</button>
+          </div>
         </div>
         <div class="column">
+          <div>
           <h2> Náhľad: </h2>
           <canvas id="cv" width="450" height="800"></canvas>  
           <!--Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/-->
           <!-- button to generate GIF / MP4 video -->
+          </div>
         </div>
       </div> 
   </div>
@@ -99,14 +103,11 @@ export default {
     drawCanvas: function () {
       var cv = document.getElementById("cv");
       var ctx = cv.getContext('2d');
-      let f = new FontFace('CourierPrime-Regular', 'url("../assets/CourierPrime-Regular.ttf")');
 
-      ctx.font=f.load();
-      
-      var story1 = {txt:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non dui ut quam malesuada lobortis. Integer ac efficitur nunc. Phasellus suscipit nulla tincidunt justo porta, vitae gravida diam convallis.", 
+      var story1 = {txt:this.header, 
                   storycount:0,
                   linecount:0,
-                  lineheight:18,
+                  lineheight:30,
                   xpos:10,
                   ypos:50,
                   startY:50,
@@ -115,11 +116,10 @@ export default {
                   complete:false,
                   storyarr:[]};
       
-      
-      var story2 = {txt:"Creswell does an excellent job categorizing the various qualitative methods into five approaches: narrative research, phenomenology, grounded theory, ethnography, and case study...The author has expanded on and updated the information he presented in the first edition of the book (Creswell, 1998), including discussion of the various schools of thought that have developed among qualitative researchers since the mid 1990's...Qualitative Inquiry & Research Design: Choosing among five approaches is a highly informative book; researchers will likely return again and against to the book as they expand their comfort zone within qualitative research.", 
+      var story2 = {txt:this.text,
                   storycount:0,
                   linecount:0,
-                  lineheight:18,
+                  lineheight:30,
                   xpos:10,
                   ypos:150,
                   startY:150,
@@ -131,14 +131,19 @@ export default {
       setInterval(doAnimation, 50);
       var canvasWidth = 450;
       var canvasHeight = 800;
+      ctx.font = "3vw Komu-A";
       story1.storyarr = getLines(ctx, story1.txt, 10, 450);
+      ctx.font= "1.45vw CourierPrime-Regular";
       story2.storyarr = getLines(ctx, story2.txt, 10, 450);
       
       function doAnimation(){
-        ctx.clearRect(0,0,canvasWidth, canvasHeight); 
+        ctx.clearRect(0,0,canvasWidth, canvasHeight);
+        ctx.fillStyle = "#ffffe6";
+        ctx.font = "3vw Komu-A";
         animateTxt(story1,ctx); 
         if (story1.complete){
-          story2.startY = story1.ypos + 30;
+          ctx.font= "1.45vw CourierPrime-Regular";
+          story2.startY = story1.ypos + 50;
           animateTxt(story2,ctx);  
         }
       }
@@ -184,11 +189,11 @@ export default {
           context.fillText(storytxt.substr(0, story.storycount), story.xpos, story.ypos);  
         }
           //Write Out The Previous Lines Too  
-          for(var i=0; i<story.storyarr.length; i++){
-            if(i < story.linecount){
-              context.fillText(story.storyarr[i], story.xpos, (story.startY + (story.lineheight*i)) ) ;
-            }
-          }  
+        for(var i=0; i<story.storyarr.length; i++){
+          if(i < story.linecount){
+            context.fillText(story.storyarr[i], story.xpos, (story.startY + (story.lineheight*i)) ) ;
+          }
+        }  
       }
 
     }
@@ -199,15 +204,15 @@ export default {
 <style>
 @font-face {
     font-family: "Komu-A";
-    src: url("../assets/Komu-A.otf");
+    src: url("assets/Komu-A.otf");
 }
 @font-face {
     font-family: "CourierPrime-Regular";
-    src: url("../assets/CourierPrime-Regular.ttf");
+    src: url("assets/CourierPrime-Regular.ttf");
 }
 @font-face {
     font-family: "CourierPrime-Bold";
-    src: url("../assets/CourierPrime-Bold.ttf");
+    src: url("assets/CourierPrime-Bold.ttf");
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -232,6 +237,9 @@ input {
 .column {
   float: left;
   width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 /* Clear floats after the columns */
 .row:after {
@@ -246,5 +254,6 @@ input {
 }
 canvas {
   border:1px solid #f00;
+  background: black;
 }
 </style>
