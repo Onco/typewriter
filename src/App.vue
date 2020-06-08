@@ -43,7 +43,8 @@
         </div>
         <div class="column">
           <h2> Náhľad: </h2>
-          <Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/>
+          <canvas id="cv" width="450" height="800"></canvas>  
+          <!--Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/-->
           <!-- button to generate GIF / MP4 video -->
         </div>
       </div> 
@@ -51,15 +52,15 @@
 </template>
 
 <script>
-import Typewriter from './components/Typewriter.vue'
+//import Typewriter from './components/Typewriter.vue'
 
 export default {
   name: 'App',
   props: {
-    toggle: {
-        type: Boolean,
-        default: true
-    },
+    //toggle: {
+    //    type: Boolean,
+    //    default: true
+    //},
     header: {
         type: String,
         default: 'POMENOVANIE'
@@ -86,19 +87,128 @@ export default {
     },
   },
   components: {
-    Typewriter
+    //Typewriter
   },
   methods: {
     changeToggle: function () {
-      this.toggle = !this.toggle
+      //this.toggle = !this.toggle
+      this.drawCanvas()
     },
-    captureVideo: function() {
+    captureVideo: function () {
+    },
+    drawCanvas: function () {
+      var cv = document.getElementById("cv");
+      var ctx = cv.getContext('2d');
+      let f = new FontFace('CourierPrime-Regular', 'url("../assets/CourierPrime-Regular.ttf")');
+
+      ctx.font=f.load();
+      
+      var story1 = {txt:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non dui ut quam malesuada lobortis. Integer ac efficitur nunc. Phasellus suscipit nulla tincidunt justo porta, vitae gravida diam convallis.", 
+                  storycount:0,
+                  linecount:0,
+                  lineheight:18,
+                  xpos:10,
+                  ypos:50,
+                  startY:50,
+                  speed:2,
+                  animate:true,
+                  complete:false,
+                  storyarr:[]};
+      
+      
+      var story2 = {txt:"Creswell does an excellent job categorizing the various qualitative methods into five approaches: narrative research, phenomenology, grounded theory, ethnography, and case study...The author has expanded on and updated the information he presented in the first edition of the book (Creswell, 1998), including discussion of the various schools of thought that have developed among qualitative researchers since the mid 1990's...Qualitative Inquiry & Research Design: Choosing among five approaches is a highly informative book; researchers will likely return again and against to the book as they expand their comfort zone within qualitative research.", 
+                  storycount:0,
+                  linecount:0,
+                  lineheight:18,
+                  xpos:10,
+                  ypos:150,
+                  startY:150,
+                  speed:2,
+                  animate:true,
+                  complete:false,
+                  storyarr:[]};
+      
+      setInterval(doAnimation, 50);
+      var canvasWidth = 450;
+      var canvasHeight = 800;
+      story1.storyarr = getLines(ctx, story1.txt, 10, 450);
+      story2.storyarr = getLines(ctx, story2.txt, 10, 450);
+      
+      function doAnimation(){
+        ctx.clearRect(0,0,canvasWidth, canvasHeight); 
+        animateTxt(story1,ctx); 
+        if (story1.complete){
+          story2.startY = story1.ypos + 30;
+          animateTxt(story2,ctx);  
+        }
+      }
+      
+      function getLines(context, str, x, maxWidth) {
+        //adapt from https://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
+        var words = str.split(' ');
+        var lineNumber = 0;
+        var linesarr = [];
+        var lineOfText = "";
+        for(var n=0; n<words.length; n++) {
+          var checkEndOfLine = lineOfText + words[n] + ' ';
+          var checkTextWidth = context.measureText(checkEndOfLine);
+          var textWidth = checkTextWidth.width;    
+          
+          if(textWidth > (maxWidth-10) ) {
+            lineNumber++;
+            lineOfText = words[n] + ' ';
+          } else { 
+            lineOfText = checkEndOfLine; 
+          }
+          linesarr[lineNumber] = lineOfText;
+        }
+        return linesarr;
+      } 
+      
+      function animateTxt(story,context){
+        if(story.animate){
+        story.storycount+=story.speed;
+        var storytxt = story.storyarr[story.linecount];
+        story.ypos = story.startY + story.lineheight * story.linecount;
+        if (story.storycount > storytxt.length-1){
+          story.storycount = 0;
+          story.linecount++;
+          
+          if(story.linecount > story.storyarr.length-1){
+            //clearInterval(intervalID);
+            story.animate = false;
+            story.complete = true;
+          }
+        }
+        //context.clearRect(0, 0, canvasWidth, canvasHeight);
+          context.fillText(storytxt.substr(0, story.storycount), story.xpos, story.ypos);  
+        }
+          //Write Out The Previous Lines Too  
+          for(var i=0; i<story.storyarr.length; i++){
+            if(i < story.linecount){
+              context.fillText(story.storyarr[i], story.xpos, (story.startY + (story.lineheight*i)) ) ;
+            }
+          }  
+      }
+
     }
   }
 }
 </script>
 
 <style>
+@font-face {
+    font-family: "Komu-A";
+    src: url("../assets/Komu-A.otf");
+}
+@font-face {
+    font-family: "CourierPrime-Regular";
+    src: url("../assets/CourierPrime-Regular.ttf");
+}
+@font-face {
+    font-family: "CourierPrime-Bold";
+    src: url("../assets/CourierPrime-Bold.ttf");
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -133,5 +243,8 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+canvas {
+  border:1px solid #f00;
 }
 </style>
