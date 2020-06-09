@@ -46,8 +46,8 @@
         <div class="column">
           <div>
           <h2> Náhľad: </h2>
-          <canvas id="cv" width="450" height="800"></canvas>  
-          <!--Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/-->
+          <!--canvas id="cv" width="450" height="800"></canvas-->  
+          <Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/>
           <!-- button to generate GIF / MP4 video -->
           </div>
         </div>
@@ -56,15 +56,15 @@
 </template>
 
 <script>
-//import Typewriter from './components/Typewriter.vue'
+import Typewriter from './components/Typewriter.vue'
 
 export default {
   name: 'App',
   props: {
-    //toggle: {
-    //    type: Boolean,
-    //    default: true
-    //},
+    toggle: {
+        type: Boolean,
+        default: true
+    },
     header: {
         type: String,
         default: 'POMENOVANIE'
@@ -91,12 +91,12 @@ export default {
     },
   },
   components: {
-    //Typewriter
+    Typewriter
   },
   methods: {
     changeToggle: function () {
-      //this.toggle = !this.toggle
-      this.drawCanvas()
+      this.toggle = !this.toggle
+      //this.drawCanvas()
     },
     captureVideo: function () {
     },
@@ -237,9 +237,6 @@ input {
 .column {
   float: left;
   width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 /* Clear floats after the columns */
 .row:after {
