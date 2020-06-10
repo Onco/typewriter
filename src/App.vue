@@ -4,51 +4,47 @@
     <img alt="Do Sto Slov" src="./assets/logo.jpg">
       <div class="row">
         <div class="column">
-          <div>
-          <form>
-          <p class="table-row">
-            <label for="name">Názov:</label>
-            <input id="name" v-model="header">
-          </p>
-          <p class="table-row">
-            <label for="txt">Text:</label>
-            <br>
-            <textarea id="txt" cols="60" rows="11" v-model="text"></textarea>
-          </p>
-          <p class="table-row">
-            <label for="name-spd">Rýchlosť názvu:</label>
-            <input id="name-spd" v-model="headerSpeed">
-          </p>
-          <p class="table-row">
-            <label for="txt-spd">Rýchlosť textu:</label>
-            <input id="txt-spd" v-model="textSpeed">
-          </p>
-          <p class="table-row">
-            <label for="sent-pause">Pauza po vete:</label>
-            0.05s
-            <input id="sent-pause" type="range" min="50" max="2000" value="200" v-model="fullStopPause">
-            2s
-          </p>
-          <p class="table-row">
-            <label for="name-pause">Pauza po názve:</label>
-            0.05s
-            <input id="name-pause" type="range" min="50" max="5000" value="1000" v-model="pauseAfterHeader">
-            5s
-          </p>
-          </form>
-          <br>
-          <button v-on:click="changeToggle">Spusti</button>
-          <br>
-          <br>
-          <button v-on:click="captureVideo">Uloz GIF</button>
+          <div class="centered">
+            <form>
+            <p class="table-row">
+                <label for="name">Názov:</label>
+                <input id="name" v-model="header">
+            </p>
+            <p class="table-row">
+                <label for="txt">Text:</label>
+                <br>
+                <textarea id="txt" cols="60" rows="11" v-model="text"></textarea>
+            </p>
+            <p class="table-row">
+                <label for="name-spd">Rýchlosť názvu:</label>
+                <input id="name-spd" v-model="headerSpeed">
+            </p>
+            <p class="table-row">
+                <label for="txt-spd">Rýchlosť textu:</label>
+                <input id="txt-spd" v-model="textSpeed">
+            </p>
+            <p class="table-row">
+                <label for="sent-pause">Pauza po vete:</label>
+                0.05s
+                <input id="sent-pause" type="range" min="50" max="2000" value="200" v-model="fullStopPause">
+                2s
+            </p>
+            <p class="table-row">
+                <label for="name-pause">Pauza po názve:</label>
+                0.05s
+                <input id="name-pause" type="range" min="50" max="5000" value="1000" v-model="pauseAfterHeader">
+                5s
+            </p>
+            </form>
           </div>
+          <p>
+            <button v-on:click="changeToggle">Spusti</button>
+          </p>
         </div>
         <div class="column">
           <div>
           <h2> Náhľad: </h2>
-          <!--canvas id="cv" width="450" height="800"></canvas-->  
-          <Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/>
-          <!-- button to generate GIF / MP4 video -->
+            <Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/>
           </div>
         </div>
       </div> 
@@ -97,8 +93,6 @@ export default {
     changeToggle: function () {
       this.toggle = !this.toggle
       //this.drawCanvas()
-    },
-    captureVideo: function () {
     },
     drawCanvas: function () {
       var cv = document.getElementById("cv");

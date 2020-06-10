@@ -2,8 +2,9 @@
   <div class="root">
   <meta charset="utf-8">
     <div class="centered">
-        <div class="typewriter">
-          <div style="--aspect-ratio:9/16;">
+        <div ref="printMe" class="typewriter">
+          <!--div style="--aspect-ratio:9/16;"-->
+          <div class="size">
             <div>
               <vue-typed-js class="centered" :strings=processedHeader :typeSpeed=headerSpeed :showCursor="false">
                 <div class="header-style">
@@ -19,6 +20,10 @@
           </div>
         </div>
     </div>
+    <br>
+    <button v-on:click="print">Uloz GIF</button>
+    <br>
+    <img :src="output">
   </div>
 </template>
 
@@ -32,6 +37,11 @@ export default {
     textSpeed: Number,
     fullStopPause: Number,
     pauseAfterHeader: Number
+  },
+  data() {
+    return {
+        output: null
+    }
   },
   computed: {
     processedMsg() {
@@ -82,6 +92,18 @@ export default {
     processedTextSpeed() {
       return this.textSpeed
     }
+  },
+  methods: {
+    async print() {
+      const el = this.$refs.printMe;
+      const options = {
+        type: 'dataURL'
+      }
+      this.output = await this.$html2canvas(el, options);
+    }
+  },
+  mounted() {
+    this.print()
   }
 }
 //var capturer = new this.$CCapture( {
@@ -129,6 +151,11 @@ export default {
   text-align: justify;
   text-justify: inter-word;
   width: 90%;
+}
+.size {
+  width: 450px;
+  height: 800px;
+  background: black;
 }
 
 [style*="--aspect-ratio"] > :first-child {
