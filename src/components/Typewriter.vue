@@ -24,10 +24,13 @@
     <button v-on:click="print">Uloz GIF</button>
     <br>
     <img :src="output">
+    <img :src="result">
   </div>
 </template>
 
 <script>
+var GIF = require('./gif.js')
+
 export default {
   name: 'Typewriter',
   props: {
@@ -40,7 +43,8 @@ export default {
   },
   data() {
     return {
-        output: null
+        output: null,
+        result: null
     }
   },
   computed: {
@@ -100,6 +104,20 @@ export default {
         type: 'dataURL'
       }
       this.output = await this.$html2canvas(el, options);
+      
+      var gif = GIF({
+        workers: 2,
+        quality: 10
+      });
+      alert('Ahoj');
+      
+      gif.addFrame(this.output);
+
+      gif.on('finished', function(blob) {
+        this.result = URL.createObjectURL(blob);
+      });
+
+      gif.render();
     }
   },
   mounted() {
