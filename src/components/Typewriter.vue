@@ -24,12 +24,13 @@
     <button v-on:click="print">Uloz GIF</button>
     <br>
     <img :src="output">
+    <br>
     <img :src="result">
   </div>
 </template>
 
 <script>
-var GIF = require('./gif.js')
+const GIFEncoder = require('gif-encoder-2')
 
 export default {
   name: 'Typewriter',
@@ -105,19 +106,25 @@ export default {
       }
       this.output = await this.$html2canvas(el, options);
       
-      var gif = GIF({
-        workers: 2,
-        quality: 10
-      });
-      alert('Ahoj');
+      const encoder = new GIFEncoder(800, 450, 'octree', true);
+      encoder.setDelay(50);
+      encoder.start();
       
-      gif.addFrame(this.output);
+      encoder.addFrame(this.output);
 
-      gif.on('finished', function(blob) {
-        this.result = URL.createObjectURL(blob);
-      });
-
-      gif.render();
+      encoder.finish();
+      
+      var blob = new Blob([encoder.out.getData()], {type: 'image/gif'})
+      const reader = new FileReader();
+      
+      reader.addEventListener("load", function () {
+        // convert image file to base64 string
+        this.result = reader.result;
+      }, false);
+           
+      if (blob) {
+        reader.readAsDataURL(blob);
+      } 
     }
   },
   mounted() {
