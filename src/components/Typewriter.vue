@@ -25,6 +25,8 @@
     <br>
     <img :src="output">
     <br>
+    <canvas id="can" width="450" height="800"></canvas>
+    <br>
     <img :src="result">
   </div>
 </template>
@@ -106,7 +108,7 @@ export default {
       }
       this.output = await this.$html2canvas(el, options);
       
-      const encoder = new GIFEncoder(800, 450, 'octree', true);
+      const encoder = new GIFEncoder(450, 800, 'octree', true);
       encoder.setDelay(50);
       encoder.start();
       
@@ -114,17 +116,11 @@ export default {
 
       encoder.finish();
       
-      var blob = new Blob([encoder.out.getData()], {type: 'image/gif'})
-      const reader = new FileReader();
-      
-      reader.addEventListener("load", function () {
-        // convert image file to base64 string
-        this.result = reader.result;
-      }, false);
-           
-      if (blob) {
-        reader.readAsDataURL(blob);
-      } 
+      var blob = new Blob([encoder.out.getData()], {type: 'image/gif'});
+      var ctx = document.getElementById("can").getContext('2d');
+      ctx.clearRect(0, 0, 450, 800);
+      ctx.drawImage(blob, 0, 0, 450, 800);
+      this.result = document.getElementById("can").toDataURL('image/gif');
     }
   },
   mounted() {
