@@ -126,6 +126,7 @@ export default {
       //this.vueCanvas.clearRect(0, 0, 450, 800);
       this.vueCanvas.drawImage(img, 0, 0);
       //this.vueCanvas.putImageData(this.output, 0, 0);
+      //this.result = document.getElementById("can").toDataURL('image/gif');
      
       // transform GIF buffer to base64
     }
