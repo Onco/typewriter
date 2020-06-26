@@ -8,28 +8,30 @@
             <div>
               <vue-typed-js class="centered" :strings=processedHeader :typeSpeed=headerSpeed :showCursor="false">
                 <div class="header-style">
-                  <p class="typing"></p>
+                  <span class="typing"></span>
                 </div>
               </vue-typed-js>
               <vue-typed-js class="centered" :strings=processedMsg :typeSpeed=processedTextSpeed :showCursor="false">
                 <div class="text-style">
-                  <div class="typing"></div>
+                  <span class="typing"></span>
                 </div>
               </vue-typed-js>
             </div>
           </div>
         </div>
     </div>
-    <br>
     <button v-on:click="print">Uloz GIF</button>
     <br>
-    <img :src="output">
-    <img :src="result">
+    <img id="img" :src="output">
+    <br>
+    <canvas id="c"></canvas>
+    <br>
+    <img id="res" :src="result">
   </div>
 </template>
 
 <script>
-var GIF = require('./gif.js')
+const GIFEncoder = require('gif-encoder-2')
 
 export default {
   name: 'Typewriter',
@@ -44,7 +46,8 @@ export default {
   data() {
     return {
         output: null,
-        result: null
+        result: null,
+        vueCanvas: null
     }
   },
   computed: {
@@ -101,27 +104,40 @@ export default {
     async print() {
       const el = this.$refs.printMe;
       const options = {
-        type: 'dataURL'
+        type: 'dataURL',
+        width: 450,
+        height: 800
       }
       this.output = await this.$html2canvas(el, options);
       
-      var gif = GIF({
-        workers: 2,
-        quality: 10
-      });
-      alert('Ahoj');
-      
-      gif.addFrame(this.output);
+      const encoder = new GIFEncoder(450, 800, 'octree', true);
+      encoder.setDelay(500)
+      encoder.start()
+      encoder.addFrame(this.output);
+      encoder.finish()
 
-      gif.on('finished', function(blob) {
-        this.result = URL.createObjectURL(blob);
-      });
+      const buffer = encoder.out.getData();     
+      const blob = new Blob([buffer], {type: 'image/gif'});
+           
+      const img = await createImageBitmap(blob);
 
-      gif.render();
+      this.result = buffer.toString('base64');
+
+      //this.vueCanvas.clearRect(0, 0, 450, 800);
+      this.vueCanvas.drawImage(img, 0, 0);
+      //this.vueCanvas.putImageData(this.output, 0, 0);
+     
+      // transform GIF buffer to base64
     }
   },
   mounted() {
-    this.print()
+    var c = document.getElementById("c");
+    c.height = 800;
+    c.width = 450;
+    var ctx = c.getContext("2d");
+    this.vueCanvas = ctx;
+    
+    //this.print()
   }
 }
 //var capturer = new this.$CCapture( {
@@ -159,16 +175,18 @@ export default {
   color: #ffffe6;
   font-family: 'Komu-A', sans-serif;
   font-style: normal;
-  font-size: 3vw;
+  font-size: 50px;
+  padding-top: 50px;
 }
 .text-style {
   color: #ffffe6;
   font-family: 'CourierPrime-Regular', monospace;
   font-weight: 100;
-  font-size: 1.45vw;
+  font-size: 25px;
   text-align: justify;
   text-justify: inter-word;
   width: 90%;
+  padding-top: 20px;
 }
 .size {
   width: 450px;
