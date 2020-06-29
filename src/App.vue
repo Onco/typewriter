@@ -44,7 +44,8 @@
         <div class="column">
           <div>
           <h2> Náhľad: </h2>
-            <Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/>
+            <!--Typewriter :msg="text" :header="header" :headerSpeed="headerSpeed" :textSpeed="textSpeed" :fullStopPause="fullStopPause" :pauseAfterHeader="pauseAfterHeader" :key="this.toggle"/-->
+            <canvas id="cv" width=450 height=800></canvas>
           </div>
         </div>
       </div> 
@@ -52,7 +53,7 @@
 </template>
 
 <script>
-import Typewriter from './components/Typewriter.vue'
+//import Typewriter from './components/Typewriter.vue'
 
 export default {
   name: 'App',
@@ -87,12 +88,12 @@ export default {
     },
   },
   components: {
-    Typewriter
+    //Typewriter
   },
   methods: {
     changeToggle: function () {
-      this.toggle = !this.toggle
-      //this.drawCanvas()
+      //this.toggle = !this.toggle
+      this.drawCanvas()
     },
     drawCanvas: function () {
       var cv = document.getElementById("cv");
@@ -102,7 +103,7 @@ export default {
                   storycount:0,
                   linecount:0,
                   lineheight:30,
-                  xpos:10,
+                  xpos:225,
                   ypos:50,
                   startY:50,
                   speed:2,
@@ -114,7 +115,7 @@ export default {
                   storycount:0,
                   linecount:0,
                   lineheight:30,
-                  xpos:10,
+                  xpos:225,
                   ypos:150,
                   startY:150,
                   speed:2,
@@ -122,24 +123,21 @@ export default {
                   complete:false,
                   storyarr:[]};
       
-      setInterval(doAnimation, 50);
       var canvasWidth = 450;
       var canvasHeight = 800;
-      ctx.font = "3vw Komu-A";
-      story1.storyarr = getLines(ctx, story1.txt, 10, 450);
-      ctx.font= "1.45vw CourierPrime-Regular";
-      story2.storyarr = getLines(ctx, story2.txt, 10, 450);
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      ctx.font = "50px Komu-A";
+      story1.storyarr = getLines(ctx, story1.txt, 10, 440);
+      ctx.font= "25px CourierPrime-Regular";
+      story2.storyarr = getLines(ctx, story2.txt, 10, 440);
       
-      function doAnimation(){
-        ctx.clearRect(0,0,canvasWidth, canvasHeight);
-        ctx.fillStyle = "#ffffe6";
-        ctx.font = "3vw Komu-A";
-        animateTxt(story1,ctx); 
-        if (story1.complete){
-          ctx.font= "1.45vw CourierPrime-Regular";
-          story2.startY = story1.ypos + 50;
-          animateTxt(story2,ctx);  
-        }
+      ctx.fillStyle = "#ffffe6";        
+      ctx.font = "50px Komu-A";
+      animateTxt(story1, ctx); 
+      if (story1.complete){
+        ctx.font= "25px CourierPrime-Regular";
+        story2.startY = story1.ypos + 50;
+        animateTxt(story2, ctx);  
       }
       
       function getLines(context, str, x, maxWidth) {
@@ -148,7 +146,7 @@ export default {
         var lineNumber = 0;
         var linesarr = [];
         var lineOfText = "";
-        for(var n=0; n<words.length; n++) {
+        for(var n=0; n < words.length; n++) {
           var checkEndOfLine = lineOfText + words[n] + ' ';
           var checkTextWidth = context.measureText(checkEndOfLine);
           var textWidth = checkTextWidth.width;    
@@ -164,7 +162,8 @@ export default {
         return linesarr;
       } 
       
-      function animateTxt(story,context){
+      function animateTxt(story, context){   
+        context.clearRect(0, 0, canvasWidth, canvasHeight);
         if(story.animate){
         story.storycount+=story.speed;
         var storytxt = story.storyarr[story.linecount];
@@ -180,8 +179,10 @@ export default {
           }
         }
         //context.clearRect(0, 0, canvasWidth, canvasHeight);
+          context.textAlign = "center";
           context.fillText(storytxt.substr(0, story.storycount), story.xpos, story.ypos);  
         }
+        context.textAlign = "center";
           //Write Out The Previous Lines Too  
         for(var i=0; i<story.storyarr.length; i++){
           if(i < story.linecount){
